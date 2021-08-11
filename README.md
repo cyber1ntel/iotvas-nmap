@@ -4,13 +4,13 @@ This repository hosts a NSE script that uses [IoTVAS API](https://iotvas-api.fir
 
 # Installation
 
-1. Copy the iotvas.nse file to the nmap scripts folder on your system:
+Copy the iotvas.nse file to the nmap scripts folder on your system:
 
-> cp iotvas.nse /usr/share/nmap/scripts
+    cp iotvas.nse /usr/share/nmap/scripts
 
-2. Test if script is recognized by nmap:
+Then, test if script is recognized by nmap:
 
-> nmap --script-help iotvas
+    nmap --script-help iotvas
 
 # API key
 
