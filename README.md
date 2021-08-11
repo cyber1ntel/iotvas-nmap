@@ -1,14 +1,14 @@
 # Introduction
 
-This repository hosts a NSE script that uses [IoTVAS API](https://iotvas-api.firmalyzer.com/api/v1/docs) for IoT device discovery and firmware security assessment.
+This repository hosts a NSE script that uses [IoTVAS API](https://iotvas-api.firmalyzer.com/api/v1/docs) for IoT device discovery and firmware security assessment. This [blog post](https://firmalyzer.com/posts/connected_device_discovery_and_vulnerability_assessment.html) provides more details about the script and IoTVAS API.
 
 # Installation
 
-1. Copy the iotvas.nse file to the nmap scripts folder on your system:
+Copy the iotvas.nse file to the nmap scripts folder on your system:
 
     cp iotvas.nse /usr/share/nmap/scripts
 
-2. Test if script is recognized by nmap:
+Then, test if script is recognized by nmap:
 
     nmap --script-help iotvas
 
