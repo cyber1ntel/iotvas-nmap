@@ -140,7 +140,16 @@ local function set_unknown_fields(output)
 end
 
 local function get_http_response(host, port)
-  local response = http.get(host, port, "/")
+  local options = { no_cache = true, bypass_cache = true, redirect_ok=function(host, port)
+      local c = 3
+      return function(url)
+        if (c == 0) then return false end
+        c = c - 1
+        return true
+      end
+    end }
+
+  local response = http.get(host, port, "/", options)
   if response.body then
     return response.body
   end
