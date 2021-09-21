@@ -10,7 +10,7 @@ This script requires an IoTVAS API key that can be obtained from https://iotvas-
 
 ---
 -- @usage
--- nmap -sSU -p U:161,T:- --top-ports 1000 --script iotvas.nse --script-args 'iotvas.api_key=<API_KEY>' -Pn <target>
+-- nmap -sSU -p U:161,T:- --top-ports 1000 --script iotvas.nse --script-args iotvas.api_key=<API_KEY> -Pn <target>
 -- @args iotvas.api_key Provide your IoTVAS API key
 -- @args iotvas.disco_only Perform device discovery scan without firmware security assessment
 -- @output
@@ -108,7 +108,7 @@ local API_HOST = "iotvas-api.firmalyzer.com"
 
 prerule = function()
   if not arg_api_key then
-    stdnse.verbose1("Error: Please specific your IoTVAS API key with %s.api_key argument", SCRIPT_NAME)
+    stdnse.verbose1("Error: Please specify your IoTVAS API key with %s.api_key argument", SCRIPT_NAME)
     return false
   end
   return true
