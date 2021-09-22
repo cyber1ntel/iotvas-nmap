@@ -20,7 +20,7 @@ Please visit the [IoTVAS signup page](https://iotvas-api.firmalyzer.com/portal/s
 
 The API key should be supplied in the nmap script arguments as follows:
 
-    nmap -sSU -p U:161,T:- --top-ports 1000 --script iotvas.nse --script-args 'iotvas.api_key=<API_KEY>' <target>
+    nmap -sSU -p U:161,T:- --top-ports 1000 --script iotvas.nse --script-args iotvas.api_key=<API_KEY> <target>
 
 We recommend the use of nmap TCP SYN and TCP connect scans when running IoTVAS script. You can specify a TCP port range other than the top 1000 ports to speed up nmap. However, please note the following: 
 
