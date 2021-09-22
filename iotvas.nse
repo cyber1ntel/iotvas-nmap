@@ -100,6 +100,7 @@ local stdnse = require "stdnse"
 local ftp = require "ftp"
 local strbuf = require "strbuf"
 local tab = require "tab"
+local upnp = require "upnp"
 
 local arg_api_key = stdnse.get_script_args(SCRIPT_NAME .. ".api_key")
 local arg_disco_only = stdnse.get_script_args(SCRIPT_NAME .. ".disco_only") or false
@@ -186,6 +187,17 @@ local function get_snmp_oid(host, port, oid)
     return ("")
   end
   return (response and response[1] and response[1][1])
+end
+
+local function get_upnp_response(host)
+  local port = { number = 1900, protocol = "udp" }
+  local helper = upnp.Helper:new( host, port )
+  helper:setOverride( true )
+  local status, result = helper:queryServices()
+  if (status) then
+    result["name"] = nil
+    return stdnse.format_output(true, result)
+  end
 end
 
 local function parse_telnet_msg(msg)
@@ -406,7 +418,8 @@ host_action = function(host)
     snmp_sysoid = "",
     telnet_banner = "",
     hostname = "",
-    nic_mac = ""
+    nic_mac = "",
+    upnp_response = ""
   }
   local response = stdnse.output_table()
   local port = nmap.get_ports(host, nil, "tcp", "open")
@@ -452,12 +465,14 @@ host_action = function(host)
   end
 
   -- get snmp strings
-  local udp = nmap.get_port_state(host, {number = 161, protocol = "udp"})
-  if udp ~= nil and (udp.state == "open" or udp.state == "open|filtered") then
-    features.snmp_sysdescr = get_snmp_oid(host, udp, "1.3.6.1.2.1.1.1.0")
-    local oid = get_snmp_oid(host, udp, "1.3.6.1.2.1.1.2.0")
+  local snmp_port = nmap.get_port_state(host, {number = 161, protocol = "udp"})
+  if snmp_port ~= nil and (snmp_port.state == "open" or snmp_port.state == "open|filtered") then
+    features.snmp_sysdescr = get_snmp_oid(host, snmp_port, "1.3.6.1.2.1.1.1.0")
+    local oid = get_snmp_oid(host, snmp_port, "1.3.6.1.2.1.1.2.0")
     if oid ~= "" and oid ~=nil then features.snmp_sysoid = snmp.oid2str(oid) end
   end
+  -- get upnp response
+  features.upnp_response = get_upnp_response(host)
 
   if should_call_detection(features) then
     local detection = detect_device(features)
