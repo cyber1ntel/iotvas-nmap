@@ -469,7 +469,16 @@ host_action = function(host)
   if snmp_port ~= nil and (snmp_port.state == "open" or snmp_port.state == "open|filtered") then
     features.snmp_sysdescr = get_snmp_oid(host, snmp_port, "1.3.6.1.2.1.1.1.0")
     local oid = get_snmp_oid(host, snmp_port, "1.3.6.1.2.1.1.2.0")
-    if oid ~= "" and oid ~=nil then features.snmp_sysoid = snmp.oid2str(oid) end
+    if oid ~= "" and oid ~=nil then
+      local snmp_sysoid = snmp.oid2str(oid)
+      if snmp_sysoid ~= nil then
+        if string.sub(snmp_sysoid,1,1) ~= '.' then
+          features.snmp_sysoid = '.' .. snmp_sysoid
+        else
+          features.snmp_sysoid = snmp_sysoid
+        end
+      end
+    end
   end
   -- get upnp response
   features.upnp_response = get_upnp_response(host)
